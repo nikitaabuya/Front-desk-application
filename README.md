@@ -2,7 +2,9 @@
 import javax.swing.*;    
 import java.awt.event.*;  
 public class PProject {  
-    public static void main(String[] args) {    
+    public static void main(String[] args) {  
+        dbconnect connect = new dbconnect();
+        connect.getData();
     JFrame myframe=new JFrame("log in");    
      final JLabel label = new JLabel();
      label.setBounds(20,150, 200,50); 
@@ -35,4 +37,46 @@ public class PProject {
                 }  
              });   
 }  
+}
+
+
+
+import java.sql.*;
+
+public class dbconnect {
+    private Connection con;
+    private Statement st;
+    private ResultSet rs;
+    
+    public dbconnect (){
+        try{
+            Class.forName("com.mysql.jdbc.Driver");
+            
+            con = DriverManager.getConnection("jbdc:mysql://localhost:3306/mypproject","root","");
+            st = con.createStatement();
+            
+        }catch(Exception ex){
+            System.out.println("Error: "+ex);
+        }
+    }
+    
+    public void getData(){
+        try{
+            
+            String query = "select * from users";
+            rs = st.executeQuery(query);
+            System.out.println("Record from Dtabase");
+            while(rs.next()){
+                String Gender = rs.getString("Gender");
+                String FName= rs.getString("FName");
+                String LName =  rs.getString("LName");
+                System.out.println("FName: "+FName+ "LName: "+LName+ "Gender: "+Gender);
+            }
+        
+        }catch(Exception ex){
+            System.out.println(ex);
+        }
+        
+        
+    }
 }
